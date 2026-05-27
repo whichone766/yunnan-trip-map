@@ -76,6 +76,18 @@ a { color:var(--accent); text-decoration:none; }
 /* ── Info card ── */
 .info-card { background:var(--bg-elevated); border-radius:var(--radius-md); padding:16px; box-shadow:var(--shadow-sm); margin-bottom:12px; font-size:15px; font-weight:600; line-height:1.5; }
 
+/* ── Hotel card ── */
+.hotel-card { background:var(--bg-elevated); border-radius:var(--radius-lg); padding:18px; box-shadow:var(--shadow-sm); margin-bottom:12px; }
+.hotel-card .hotel-top { display:flex; align-items:center; gap:10px; }
+.hotel-card .hotel-icon { font-size:28px; flex-shrink:0; }
+.hotel-card .hotel-info { flex:1; min-width:0; }
+.hotel-card .hotel-name { font-size:16px; font-weight:700; }
+.hotel-card .hotel-desc { font-size:13px; color:var(--text-secondary); margin-top:2px; }
+.hotel-card .hotel-links { display:flex; gap:8px; margin-top:12px; }
+.hotel-card .btn.book { background:#FF6B00; color:#fff; }
+.hotel-card .btn.gonav { background:var(--accent); color:#fff; }
+@media (prefers-color-scheme:dark) { .hotel-card .btn.book { background:#CC5600; } }
+
 /* ── Train card ── */
 .train-section { margin-bottom:20px; }
 .train-card { background:var(--bg-elevated); border-radius:var(--radius-lg); padding:16px; box-shadow:var(--shadow-sm); margin-bottom:10px; }
@@ -168,7 +180,8 @@ a { color:var(--accent); text-decoration:none; }
 .btn.xhs { background:#FF2442; color:#fff; }
 .btn.dp { background:#FF8C00; color:#fff; }
 .btn.rsv { background:var(--tint-green); color:#fff; }
-@media (prefers-color-scheme:dark) { .btn.nav { background:#C04A3A; } .btn.xhs { background:#D41E38; } .btn.dp { background:#D47500; } }
+.btn.fly { background:#FF6B00; color:#fff; }
+@media (prefers-color-scheme:dark) { .btn.nav { background:#C04A3A; } .btn.xhs { background:#D41E38; } .btn.dp { background:#D47500; } .btn.fly { background:#CC5600; } }
 
 .details { margin-top:12px; padding-top:12px; border-top:1px solid var(--separator); font-size:14px; color:var(--text-secondary); line-height:1.7; }
 .refs-list { margin-top:10px; padding:10px 12px; background:rgba(255,36,66,.06); border-radius:var(--radius-sm); }
@@ -348,7 +361,7 @@ function gcj(lng,lat){if(!(lng>73.66&&lng<135.05&&lat>3.86&&lat<53.55))return[ln
 
 // ═══ Data — 替换为实际旅行数据 ═══
 // 坐标使用 WGS-84（gcj() 会自动转换为 GCJ-02）
-const HOTEL = { name:'一树花开客栈（大理古城洱海门店）', lat:25.699356, lng:100.171089 };
+const HOTEL = { name:'一树花开客栈（大理古城洱海门店）', lat:25.699356, lng:100.171089, url:'https://a.feizhu.com/1FRY37', desc:'古城东门，出行方便 · ¥330/晚' };
 const FLIGHTS = {
   go:  { no:'CZ3481 南航', from:'广州白云 T2', to:'大理凤仪', dep:'06:40', arr:'09:25', dur:'约2h45min', price:'¥1940/人', cls:'经济舱', date:'8月1日 周六', url:'https://a.feizhu.com/4a8Xgq' },
   back:{ no:'MU9741 东航', from:'大理凤仪', to:'广州白云 T3', dep:'15:10', arr:'17:40', dur:'约2h30min', price:'¥1450/人', cls:'经济舱', date:'8月3日 周一', url:'https://a.feizhu.com/0W93GY' }
@@ -501,7 +514,7 @@ function trainCard(t, label, color) {
       <div class="train-arrow"><span style="font-size:11px">${t.dur}</span><div class="arrow-line"></div></div>
       <div class="train-station"><div class="station-name">${t.to}</div><div class="station-time">${t.arr}</div></div>
     </div>
-    <div class="train-meta"><span>${t.cls}</span><span>${t.price}</span></div>
+    <div class="train-meta"><span>${t.cls}</span><span>${t.price}</span>${t.url ? `<a href="${t.url}" target="_blank" class="btn fly" style="margin-left:auto;">✈️ 去预订</a>` : ''}</div>
   </div>`;
 }
 
@@ -524,7 +537,19 @@ function overviewContent() {
   <div class="tags"><span class="tag">✈️ 佛山飞大理</span><span class="tag">🚲 洱海骑行</span><span class="tag">💑 情侣游</span></div>
 </div>
 <div class="section-head">🏨 住宿</div>
-<div class="info-card">${HOTEL.name}</div>
+<div class="hotel-card">
+  <div class="hotel-top">
+    <div class="hotel-icon">🏨</div>
+    <div class="hotel-info">
+      <div class="hotel-name">${HOTEL.name}</div>
+      ${HOTEL.desc ? `<div class="hotel-desc">${HOTEL.desc}</div>` : ''}
+    </div>
+  </div>
+  <div class="hotel-links">
+    ${HOTEL.url ? `<a href="${HOTEL.url}" target="_blank" class="btn book">🛒 飞猪预订</a>` : ''}
+    <a href="${amapWebUrl(HOTEL.name,HOTEL.lat,HOTEL.lng)}" target="_blank" class="btn gonav">🧭 导航</a>
+  </div>
+</div>
 
 <div class="section-head">✈️ 机票信息</div>
 <div class="train-section">${trainCard(FLIGHTS.go,'去程','#F4845F')}${trainCard(FLIGHTS.back,'回程','#4A9B6E')}</div>
