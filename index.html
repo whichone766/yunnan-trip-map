@@ -527,7 +527,7 @@ function overviewContent() {
 <div class="info-card">${HOTEL.name}</div>
 
 <div class="section-head">✈️ 机票信息</div>
-<div class="train-section">${trainCard(TRAINS.go,'去程','#F4845F')}${trainCard(TRAINS.back,'回程','#4A9B6E')}</div>
+<div class="train-section">${trainCard(FLIGHTS.go,'去程','#F4845F')}${trainCard(FLIGHTS.back,'回程','#4A9B6E')}</div>
 
 <div class="section-head">✅ 出发前必做</div>
 <div class="check-section">${TODO_ITEMS.map(t=>`<label class="check-row" id="row-${t.id}"><input type="checkbox" id="${t.id}" onchange="onCheck('${t.id}')"><span>${t.text}</span></label>`).join('')}</div>
